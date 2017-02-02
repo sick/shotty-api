@@ -1,0 +1,23 @@
+{
+  "name": "shotty-api",
+  "version": "0.0.1",
+  "description": "shotty api helper",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sick/shotty-api.git"
+  },
+  "keywords": [
+    "shotty",
+    "api"
+  ],
+  "author": "Shotty",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sick/shotty-api/issues"
+  },
+  "homepage": "https://github.com/sick/shotty-api#readme"
+}
