@@ -3,6 +3,8 @@
 const request = require('request'),
 	io = require('socket.io-client');
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
 module.exports = (...args) => new (class Shotty {
 	constructor(host, secret, port = 443, protocol) {
 		this._host = host;
@@ -57,7 +59,7 @@ module.exports = (...args) => new (class Shotty {
 			.then(result =>
 				!result.error
 					? resolve({desc: 'authenticated with secret', data: this._jwt = result.data.token})
-					: reject({desc: 'can`t authenticate with given secret'})
+					: reject({desc: 'can`t authenticate with given secret', result})
 			)
 			.catch(result => reject({desc: 'could not authenticate with secret due to connection error', data: result}))
 		);
