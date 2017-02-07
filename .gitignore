@@ -1,6 +1,6 @@
 .tmp
-logs
-node_modules
-npm-debug.log
-log_file
-test.js
+js/logs
+js/node_modules
+js/npm-debug.log
+js/log_file
+js/test.js
