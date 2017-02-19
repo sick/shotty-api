@@ -4,3 +4,5 @@ js/node_modules
 js/npm-debug.log
 js/log_file
 js/test.js
+
+*.pyc
