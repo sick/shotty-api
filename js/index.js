@@ -19,14 +19,14 @@ module.exports = (...args) => new (class Shotty {
 				url: `${this._serverUrl}/backend/api/${url}`,
 				method: 'POST',
 				json: data
-			})
+			}, (error, response, body) => !error ? resolve(body) : false)
 			.on('error', reject)
-			.on('response', response => response.on('data', data => resolve(JSON.parse(data))))
+			.on('response', rsp =>
+				rsp.statusCode !== 200
+				? reject({host: rsp.request.host, port: rsp.request.port, url: rsp.request.path, statusCode: rsp.statusCode})
+				: rsp.statusCode
+			)
 		);
-	}
-
-	static get _version() {
-		return '0.0.1';
 	}
 
 	_indexOf(data, id) {
@@ -38,7 +38,7 @@ module.exports = (...args) => new (class Shotty {
 		return idx;
 	}
 
-	isF(f) {
+	_isFunction(f) {
 		return typeof f === 'function';
 	}
 
@@ -70,20 +70,20 @@ module.exports = (...args) => new (class Shotty {
 			return {error: true, desc: 'wrong type of changes requested'};
 
 		const launchCallback = (changes, type) => {
-			if(type === 'init' && this.isF(c._onInit))
+			if(type === 'init' && this._isFunction(c._onInit))
 				return c._onInit(c.data);
 
 			if(type === 'changes') {
-				if(this.isF(c._onChange))
+				if(this._isFunction(c._onChange))
 					c._onChange(changes.new_val, changes.old_val, c.data);
 
-				if(changes.new_val && changes.old_val && this.isF(c._onUpdate))
+				if(changes.new_val && changes.old_val && this._isFunction(c._onUpdate))
 					return c._onUpdate(changes.new_val, changes.old_val, c.data);
 
-				if(!changes.new_val && changes.old_val && this.isF(c._onRemove))
+				if(!changes.new_val && changes.old_val && this._isFunction(c._onRemove))
 					return c._onRemove(changes.old_val, c.data);
 
-				if(changes.new_val && !changes.old_val && this.isF(c._onAdd))
+				if(changes.new_val && !changes.old_val && this._isFunction(c._onAdd))
 					return c._onAdd(changes.new_val, c.data);
 			}
 		};
@@ -112,10 +112,10 @@ module.exports = (...args) => new (class Shotty {
 		};
 
 		c.socket
-		.on('connect', this.isF(c._onConnect) ? c._onConnect : () => {})
+		.on('connect', this._isFunction(c._onConnect) ? c._onConnect : () => {})
 		.on('disconnect', (...args) => {
 			c.data = [];
-			if(this.isF(c._onDisconnect))
+			if(this._isFunction(c._onDisconnect))
 				c._onDisconnect(...args);
 		})
 		.on(type, payload => {
@@ -133,5 +133,42 @@ module.exports = (...args) => new (class Shotty {
 		});
 
 		return c;
+	}
+
+	get get() {
+		const _get = (type, id = null, projectId = null, shotId = null, versionId = null) =>
+			new Promise((resolve, reject) =>
+				this._request('get', {
+					token: this._jwt,
+					type: type,
+					id: id,
+					projectId: projectId,
+					shotId: shotId,
+					versionId: versionId
+				})
+				.then(resp => !resp.error ? resolve(resp.data) : reject(resp))
+				.catch(reject)
+			);
+
+		return {
+			user: id => _get('users', id),
+			users: (...args) => _get('users', null, ...args),
+			chat: id => _get('chats', id),
+			chats: (...args) => _get('chats', null, ...args),
+			task: id => _get('tasks', id),
+			tasks: (...args) => _get('tasks', null, ...args),
+			review: id => _get('reviews', id),
+			reviews: (...args) => _get('reviews', null, ...args),
+			todo: id => _get('reviews', id),
+			todos: (...args) => _get('reviews', null, ...args),
+			version: id => _get('versions', id),
+			versions: (...args) => _get('versions', null, ...args),
+			shot: id => _get('shots', id),
+			shots: (...args) => _get('shots', null, ...args),
+			project: id => _get('projects', id),
+			projects: (...args) => _get('projects', null, ...args),
+			list: id => _get('lists', id),
+			lists: (...args) => _get('lists', null, ...args)
+		}
 	}
 })(...args);
