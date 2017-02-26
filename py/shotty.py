@@ -23,7 +23,8 @@ class api:
 			self.jwt = resp['data']['token']
 
 	def _on_socket_response(self, *args):
-		print('_on_socket_response', json.loads(args[0].split(',', 1)[1]))
+		resp = json.loads(args[0].split(',', 1)[1])
+		print('_on_socket_response', resp)
 
 
 	def changes(self, namespace):
