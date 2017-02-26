@@ -6,9 +6,9 @@ Install:
 
 `npm i shotty-api --save`
 
-Documenation: [js/readme.md](js/readme.md)
+- [Documentation](js/readme.md)
 
 
 ### Python module:
 
-Documentation: [py/readme.md](py/readme.md)
+- [Documentation](py/readme.md)
