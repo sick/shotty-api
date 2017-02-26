@@ -11,6 +11,7 @@ class api:
 		self.serverUrl = '%s://%s:%i' % (self.protocol, self.host, self.port)
 		self.secret = secret
 		self.jwt = False
+		self.types = ['users', 'chats', 'tasks', 'todos', 'versions', 'shots', 'projects', 'lists']
 		self._connect()
 
 	def _connect(self):
@@ -28,14 +29,7 @@ class api:
 
 
 	def changes(self, namespace):
-		if namespace not in ['users',
-							 'chats',
-							 'tasks',
-							 'todos',
-							 'versions',
-							 'shots',
-							 'projects',
-							 'lists']:
+		if namespace not in self.types:
 			raise ValueError('wrong type of changes requested')
 
 
@@ -49,4 +43,23 @@ class api:
 		socket.on('message', self._on_socket_response)
 
 		socket.wait() # Wait forever.
+
+	def get(self, what, id=False, projectId=False, shotId=False, versionId=False):
+		if what not in self.types:
+			raise ValueError('wrong type of data requested')
+
+		payload = {
+			'token': self.jwt,
+			'type': what,
+			'id': id,
+			'projectId': projectId,
+			'shotId': shotId,
+			'versionId': versionId
+		}
+		r = requests.post('%s/backend/api/get' % self.serverUrl, json=payload)
+		resp = json.loads(r.text)
+		if resp['error']:
+			raise ValueError('got error %s' % resp['desc'])
+		else:
+			return resp['data']
 
