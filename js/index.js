@@ -66,7 +66,7 @@ module.exports = (...args) => new (class Shotty {
 	}
 
 	changes(type, initCallbacks = {}) {
-		if(!(type in {users: 1, chats: 1, tasks: 1, reviews: 1, versions: 1, shots: 1, projects: 1, lists: 1}))
+		if(!(type in {users: 1, chats: 1, tasks: 1, reviews: 1, todos: 1, versions: 1, shots: 1, projects: 1, lists: 1}))
 			return {error: true, desc: 'wrong type of changes requested'};
 
 		const launchCallback = (changes, type) => {
