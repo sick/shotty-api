@@ -1,0 +1,13 @@
+CHANGES.txt
+LICENSE.txt
+MANIFEST.in
+README.rst
+VERSION
+setup.py
+shotty/__init__.py
+shotty/rest.py
+shotty.egg-info/PKG-INFO
+shotty.egg-info/SOURCES.txt
+shotty.egg-info/dependency_links.txt
+shotty.egg-info/requires.txt
+shotty.egg-info/top_level.txt

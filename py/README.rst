@@ -1,3 +1,17 @@
+shotty
+===========================================================
+
+Installation
+------------
+
+Installation using pip::
+
+    pip install shotty
+
+Usage
+-----
+
+*Usage instructions here*
 ```python
 from shotty import api
 shotty = api('localhost', '54342a78-e2e8f65f-8040ae5f-5a01fe75-66909b98')
@@ -31,3 +45,15 @@ print 'dailies versions', len([version for version in versions if version['type'
 shotty.get('versions', shotId='748324hfsd904') # get all versions for one shot
 shotty.changes('versions') # get realtime updates for all versions
 ```
+
+
+
+Credits
+-------
+
+*Any credits here*
+
+shotty is packaged using seed_.
+
+.. _seed: https://github.com/adamcharnock/seed/
+
