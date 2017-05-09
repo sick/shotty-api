@@ -1,1 +1,1 @@
-from api import api
+from rest import api
