@@ -4,7 +4,7 @@ from os.path import exists
 from setuptools import setup, find_packages
 
 setup(
-    name='shotty-api',
+    name='shotty',
     version=open('VERSION').read().strip(),
     # Your name & email here
     author='Ilya Lindberg',

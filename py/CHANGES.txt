@@ -1,8 +1,13 @@
-Change-log for shotty-api.
+Change-log for shotty.
 
 This file will be added to as part of each release
 
 ----
+
+Version 0.1.1, Wed 10 May 2017
+===============================
+
+
 
 Version 0.1.0 (first version), Tue 09 May 2017
 ===============================================
