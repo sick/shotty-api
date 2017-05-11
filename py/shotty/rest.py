@@ -5,7 +5,6 @@ import os.path
 
 class api:
 	def __init__(self, host, secret, port=443):
-
 		self.host = host
 		self.port = int(port)
 		self.user = ''
@@ -77,18 +76,17 @@ class api:
 		}
 
 		payload = {
-			'apiKey': self.secret,
-			'studioId': 'mrp', #legacy
+			'secret': self.secret,
 			'projectId': data['projectId'],
 			'shotId': data['shotId'],
 			'name': filename,
 			'iteration': 0,
-			'creatorId': self.email,
+			'creatorId': data['creatorId'],
 			'description': data['description'] if data['description'] else '',
 			'type': data['type']
 		}
 
-		r = requests.post('%s/upload/version' % self._uploaderUrl, files=file, data=payload)
+		r = requests.post('%s/upload/version' % self.serverUrl, files=file, data=payload)
 		resp = json.loads(r.text)
 		if resp['error']:
 			raise ValueError('got error %s' % resp['desc'])
