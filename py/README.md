@@ -12,6 +12,7 @@ Usage
 -----
 
 *Usage instructions here*
+
 ```python
 from shotty import api
 shotty = api('localhost', '54342a78-e2e8f65f-8040ae5f-5a01fe75-66909b98')
