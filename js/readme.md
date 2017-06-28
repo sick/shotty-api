@@ -36,6 +36,7 @@ Available _types_:
 - `shots`
 - `projects`
 - `lists`
+- `settings`
 
 `allItems` is an array in which _shotty_ object holds all actual items of the `type`.
 
@@ -65,6 +66,8 @@ shotty.get.projects(projectId).then(items => ...).catch(error => ...)
 
 shotty.get.list(id).then(item => ...).catch(error => ...)
 shotty.get.lists(projectId).then(items => ...).catch(error => ...)
+
+shotty.get.settings().then(items => ...).catch(error => ...)
 ```
 
 `id` is obligatory.

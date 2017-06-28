@@ -168,7 +168,8 @@ module.exports = (...args) => new (class Shotty {
 			project: id => _get('projects', id),
 			projects: (...args) => _get('projects', null, ...args),
 			list: id => _get('lists', id),
-			lists: (...args) => _get('lists', null, ...args)
+			lists: (...args) => _get('lists', null, ...args),
+			settings: id => _get('setings')
 		}
 	}
 })(...args);
