@@ -78,7 +78,7 @@ shotty.get.lists(projectId).then(items => ...).catch(error => ...)
 const shotty = require('shotty-api')('shotty.local', 'your-secret-key');
 
 shotty.connect()
-.then(result => {
+.then(async result => {
 	// feeds
 	shotty.changes('shots', {onConnect: () => console.info('socket connected')})
 	.onInit(items => console.info('got init data', items.length))
@@ -91,6 +91,9 @@ shotty.connect()
 	shotty.get.versions('test', '3cd7c189-fda3-46c8-bb0c-742e6aa24efe')
 	.then(items => console.log('got versions', items))
 	.catch(error => console.error(error));
+
+	// you can use async/await syntax with the .get functions
+	let users = await shotty.get.users();
 })
 .catch(error => console.error(error));
 ```
