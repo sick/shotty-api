@@ -33,7 +33,8 @@ module.exports = (...args) => new (class Shotty {
 		if(data.length <= 0) return -1;
 		let idx = 0;
 		for(; idx < data.length; idx++) {
-			if(data[idx].id === id) break;
+			if(data[idx].id === id)
+				break;
 		}
 		return idx;
 	}
@@ -169,7 +170,7 @@ module.exports = (...args) => new (class Shotty {
 			projects: (...args) => _get('projects', null, ...args),
 			list: id => _get('lists', id),
 			lists: (...args) => _get('lists', null, ...args),
-			settings: id => _get('setings')
-		}
+			settings: () => _get('setings')
+		};
 	}
 })(...args);
