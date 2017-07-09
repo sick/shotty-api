@@ -30,9 +30,6 @@ module.exports = (...args) => new (class Shotty {
 	}
 
 	_indexOf(data, id) {
-		if(data.length <= 0)
-			return -1;
-
 		for(let idx = 0; idx < data.length; idx++) {
 			if(data[idx].id === id)
 				return idx;
