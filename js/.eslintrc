@@ -20,12 +20,13 @@
 				"for": {"after": false},
 				"while": {"after": false},
 				"function": {"after": false},
-				"catch": {"after": false, "before": true},
+				"catch": {"after": false},
 				"switch": {"after": false},
-				"return": {"after": true}
+				"return": {"before": true}
 			}
 		}],
-		"curly": [1, "multi"],
+		"no-unused-vars": ["error", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }],
+		"curly": [1, "multi-or-nest"],
 		"padded-blocks": [1, "never"],
 		"no-console": 0,
 		"no-unreachable": 1,
@@ -130,5 +131,20 @@
 		"valid-typeof": 2
 	},
 	"globals": {
+		"angular": true,
+		"_": true,
+		"$": true,
+		"Firebase": true,
+		"Raphael": true,
+		"debug": true,
+		"log": true,
+		"moment": true,
+		"Notification": true,
+		"XLS": true,
+		"confirm": true,
+		"Promise": true,
+		"PhotoSwipe": true,
+		"PhotoSwipeUI_Default": true,
+		"katex": true
 	}
 }
