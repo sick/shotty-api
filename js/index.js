@@ -53,6 +53,14 @@ module.exports = (...args) => new (class Shotty {
 		return data;
 	}
 
+	_checkType(type) {
+		return type in {users: 1, chats: 1, tasks: 1, todos: 1, versions: 1, shots: 1, projects: 1, lists: 1};
+	}
+
+	_modifyType(type) {
+		return {user: 'users', chat: 'chats', task: 'tasks', todo: 'todos', version: 'versions', shot: 'shots', project: 'projects', list: 'lists'}[type];
+	}
+
 	connect() {
 		return new Promise((resolve, reject) =>
 			this._request('authBySecret', {secret: this._secret})
@@ -66,7 +74,7 @@ module.exports = (...args) => new (class Shotty {
 	}
 
 	changes(type, initCallbacks = {}) {
-		if(!(type in {users: 1, chats: 1, tasks: 1, reviews: 1, todos: 1, versions: 1, shots: 1, projects: 1, lists: 1}))
+		if(!this._checkType(type))
 			return {error: true, desc: 'wrong type of changes requested'};
 
 		const launchCallback = (changes, type) => {
@@ -133,6 +141,43 @@ module.exports = (...args) => new (class Shotty {
 		});
 
 		return c;
+	}
+
+	create(type, data) {
+		type = this._modifyType(type);
+
+		return new Promise((resolve, reject) =>
+			!this._checkType(type)
+			? reject('wrong type of object')
+			: this._request('create', {type: type, data: data, token: this._jwt})
+			.then(result => !result.error ? resolve(result.data) : reject(result.data))
+			.catch(error => reject(error))
+		);
+	}
+
+	edit(type, ...args) {
+		type = this._modifyType(type);
+		let data = args.length === 1 ? args[0] : Object.assign({id: args[0]}, args[1]);
+
+		return new Promise((resolve, reject) =>
+			!this._checkType(type)
+			? reject('wrong type of object')
+			: this._request('edit', {type: type, data: data, token: this._jwt})
+			.then(result => !result.error ? resolve(result.data) : reject(result.data))
+			.catch(error => reject(error))
+		);
+	}
+
+	delete(type, id) {
+		type = this._modifyType(type);
+
+		return new Promise((resolve, reject) =>
+			!this._checkType(type)
+			? reject('wrong type of object')
+			: this._request('delete', {type: type, data: id, token: this._jwt})
+			.then(result => !result.error ? resolve(result.data) : reject(result.data))
+			.catch(error => reject(error))
+		);
 	}
 
 	get get() {
