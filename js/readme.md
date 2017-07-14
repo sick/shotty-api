@@ -170,19 +170,19 @@ const timeout = f => setTimeout(f, 1000);
 
 timeout(async () => {
 	let shot = await shotty.create('shot', {projectId: 'demo', sequence: 'api', code: '001', creatorId: null});
-	console.log('-- shot was created', shot.id);
+	console.log('created shot', shot.id);
 
 	timeout(async () => {
-		let editedShot = await shotty.edit('shot', shot.id, {description: 'lals'});
-		console.log('-- shot was edited', editedShot.id);
+		let editedShot = await shotty.edit('shot', shot.id, {description: 'test'});
+		console.log('edited shot', editedShot.id);
 
 		timeout(async () => {
-			let editedShot = await shotty.edit('shot', {id: shot.id, description: 'oh no'});
-			console.log('-- shot was edited second time', editedShot.id);
+			let editedShot = await shotty.edit('shot', {id: shot.id, description: 'test 2'});
+			console.log('edited shot again', editedShot.id);
 
 			timeout(async () => {
 				let count = await shotty.delete('shot', editedShot.id);
-				console.log('-- shot was deleted', count);
+				console.log('deleted shot', count);
 			});
 		});
 	});
