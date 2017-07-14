@@ -70,7 +70,7 @@ shotty.get.lists(projectId).then(items => ...).catch(error => ...)
 shotty.get.settings().then(items => ...).catch(error => ...)
 ```
 
-`id` is obligatory.
+`id` is required.
 
 `projectId`, `shotId` and `versionId` are optional.
 
@@ -132,7 +132,8 @@ shotty.connect()
 ```js
 const timeout = f => setTimeout(f, 1000);
 
-timeout(() =>
+shotty.connect()
+.then(() =>
 	shotty.create('shot', {projectId: 'demo', sequence: 'api', code: '001', creatorId: null})
 	.then(shot => {
 		console.log('created shot', shot.id);
@@ -168,7 +169,8 @@ timeout(() =>
 // don't forget to wrap promises with try/catch blocks
 const timeout = f => setTimeout(f, 1000);
 
-timeout(async () => {
+shotty.connect()
+.then(async () => {
 	let shot = await shotty.create('shot', {projectId: 'demo', sequence: 'api', code: '001', creatorId: null});
 	console.log('created shot', shot.id);
 
