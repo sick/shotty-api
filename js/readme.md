@@ -5,6 +5,17 @@
 `$ npm i shotty-api --save`
 
 
+### Object types:
+- `users`
+- `chats`
+- `tasks`
+- `todos`
+- `versions`
+- `shots`
+- `projects`
+- `lists`
+
+
 ### Require and initialize:
 ```js
 const shotty = require('shotty-api')('shotty.local', 'your-secret-key');
@@ -26,17 +37,6 @@ shotty.changes(type, {onConnect: () => ...})
 .onUpdate((newItem, oldItem, allItems) => ...)
 .onDisconnect(() => ...);
 ```
-
-Available _types_:
-- `users`
-- `chats`
-- `tasks`
-- `todos`
-- `versions`
-- `shots`
-- `projects`
-- `lists`
-- `settings`
 
 `allItems` is an array in which _shotty_ object holds all actual items of the `type`.
 
@@ -74,14 +74,40 @@ shotty.get.settings().then(items => ...).catch(error => ...)
 
 `projectId`, `shotId` and `versionId` are optional.
 
---
 
-### Example
+### Writing changes
+
+#### Creating
+```js
+shotty.create(type, object)
+```
+
+#### Editing
+```js
+shotty.edit(type, id, changes)
+shotty.edit(type, {id: objectId, ...changes})
+```
+
+#### Deleting
+```js
+shotty.delete(type, id)
+```
+
+All three functions return promises.
+`type` can be any of the available types except `users`.
+
+Object schemes are [here](./schemes.md).
+
+---
+
+### Examples
+
+#### Feeds and one-time requests
 ```js
 const shotty = require('shotty-api')('shotty.local', 'your-secret-key');
 
 shotty.connect()
-.then(async result => {
+.then(async result => { // async is only for `await`
 	// feeds
 	shotty.changes('shots', {onConnect: () => console.info('socket connected')})
 	.onInit(items => console.info('got init data', items.length))
@@ -99,4 +125,66 @@ shotty.connect()
 	let users = await shotty.get.users();
 })
 .catch(error => console.error(error));
+```
+
+
+#### Writing with promises
+```js
+const timeout = f => setTimeout(f, 1000);
+
+timeout(() =>
+	shotty.create('shot', {projectId: 'demo', sequence: 'api', code: '001', creatorId: null})
+	.then(shot => {
+		console.log('created shot', shot.id);
+
+		timeout(() =>
+			shotty.edit('shot', shot.id, {description: 'test'})
+			.then(editedShot => {
+				console.log('edited shot', editedShot.id);
+
+				timeout(() =>
+					shotty.edit('shot', {id: shot.id, description: 'test2'})
+					.then(editedShot => {
+						console.log('edited shot again', editedShot.id);
+
+						timeout(() =>
+							shotty.delete('shot', editedShot.id)
+							.then(result => console.log('deleted shot', result))
+							.catch(error => console.error('cannot delete shot', error))
+						);
+					})
+					.catch(error => console.error('cannot edit shot second time', error))
+				);
+			})
+			.catch(error => console.error('cannot edit shot', error))
+		);
+	})
+	.catch(error => console.error('cannot create shot', error))
+);
+```
+
+#### Writing with `async/await` functions
+```js
+// don't forget to wrap promises with try/catch blocks
+const timeout = f => setTimeout(f, 1000);
+
+timeout(async () => {
+	let shot = await shotty.create('shot', {projectId: 'demo', sequence: 'api', code: '001', creatorId: null});
+	console.log('-- shot was created', shot.id);
+
+	timeout(async () => {
+		let editedShot = await shotty.edit('shot', shot.id, {description: 'lals'});
+		console.log('-- shot was edited', editedShot.id);
+
+		timeout(async () => {
+			let editedShot = await shotty.edit('shot', {id: shot.id, description: 'oh no'});
+			console.log('-- shot was edited second time', editedShot.id);
+
+			timeout(async () => {
+				let count = await shotty.delete('shot', editedShot.id);
+				console.log('-- shot was deleted', count);
+			});
+		});
+	});
+});
 ```
