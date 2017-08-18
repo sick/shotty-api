@@ -63,7 +63,7 @@ shotty.get.shot(id).then(item => ...).catch(error => ...)
 shotty.get.shots(projectId, shotId).then(items => ...).catch(error => ...)
 
 shotty.get.project(id).then(item => ...).catch(error => ...)
-shotty.get.projects(projectId).then(items => ...).catch(error => ...)
+shotty.get.projects().then(items => ...).catch(error => ...)
 
 shotty.get.list(id).then(item => ...).catch(error => ...)
 shotty.get.lists(projectId).then(items => ...).catch(error => ...)
