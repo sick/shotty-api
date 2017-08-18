@@ -27,6 +27,18 @@ shots: <array> of <string> - shots ids
 ```
 
 
+### notifications
+```
+id: <string>
+date: <date>
+userId: <string>
+text: <string>
+url: <string> — without domain
+iconUrl: <string> — without domain
+previewUrl: <string> — without domain
+```
+
+
 ### projects
 ```
 id: <string> - human readable

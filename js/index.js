@@ -54,11 +54,11 @@ module.exports = (...args) => new (class Shotty {
 	}
 
 	_checkType(type) {
-		return type in {users: 1, chats: 1, tasks: 1, todos: 1, versions: 1, shots: 1, projects: 1, lists: 1};
+		return type in {users: 1, chats: 1, tasks: 1, todos: 1, versions: 1, shots: 1, projects: 1, lists: 1, notifications: 1};
 	}
 
 	_modifyType(type) {
-		return {user: 'users', chat: 'chats', task: 'tasks', todo: 'todos', version: 'versions', shot: 'shots', project: 'projects', list: 'lists'}[type];
+		return {user: 'users', chat: 'chats', task: 'tasks', todo: 'todos', version: 'versions', shot: 'shots', project: 'projects', list: 'lists', notification: 'notifications'}[type];
 	}
 
 	connect() {

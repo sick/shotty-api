@@ -14,6 +14,7 @@
 - `shots`
 - `projects`
 - `lists`
+- `notifications`
 
 
 ### Require and initialize:
@@ -66,6 +67,9 @@ shotty.get.projects(projectId).then(items => ...).catch(error => ...)
 
 shotty.get.list(id).then(item => ...).catch(error => ...)
 shotty.get.lists(projectId).then(items => ...).catch(error => ...)
+
+shotty.get.notification(id).then(item => ...).catch(error => ...)
+shotty.get.notifications(userId).then(items => ...).catch(error => ...)
 
 shotty.get.settings().then(items => ...).catch(error => ...)
 ```
