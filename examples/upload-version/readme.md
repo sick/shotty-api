@@ -6,7 +6,7 @@ Go to examples dir and install dependencies
 cd <directory_with_examples> && npm i
 ```
 
-Replace `your-api-key` with your API key from SHOTTY settings and `you-shotty-url` with your SHOTTY url
+Replace `YOUR-API-SECRET` with your API key from SHOTTY settings and `YOU-SHOTTY-URL` with your SHOTTY url
 
 And then to verify if everything was successful run script with help option -h
 
@@ -22,7 +22,7 @@ For example for upload-version.js output will be like this
     -h, --help               output usage information
     -V, --version            output the version number
     -d, --dir <path>         Directory with versions to upload, default is current dir
-    -g, --glob ["pattern"]   Glob pattern, default is "*.mov"
+    -p, --pattern <pattern>   Glob pattern, default is "*.mov"
     -p, --project <project>  Project code value
     -s, --status <status>    Status for new shots, default "new"
 ```

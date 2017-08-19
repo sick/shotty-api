@@ -102,6 +102,18 @@ All three functions return promises.
 
 Object schemes are [here](./schemes.md).
 
+
+#### Uploading versions
+```js
+shotty.upload(type, file, data)
+```
+
+- `type` — the type of uploading file, possible types: `avatar`, `poster`, `file` (chats), `version`
+- `file` — path to the file
+- `data` — file description fields
+
+See [example](../examples/upload-version) for versions. _More examples are coming soon._
+
 ---
 
 ### Examples

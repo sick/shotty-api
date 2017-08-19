@@ -11,14 +11,33 @@ module.exports = (...args) => new (class Shotty {
 		this._port = parseInt(port);
 		this._protocol = protocol ? protocol : (this._port === 443 ? 'https' : 'http');
 		this._serverUrl = `${this._protocol}://${this._host}:${this._port}`;
+		this._apiUrl = `${this._serverUrl}/backend/api/`;
+		this._uploadUrl = `${this._serverUrl}/upload/`;
 		this._secret = secret;
 		this._jwt = null;
 
+		this._availableDataTypes = {users: 1, chats: 1, tasks: 1, todos: 1, versions: 1, shots: 1, projects: 1, lists: 1, notifications: 1};
+		this._availableUploadTypes = {avatar: 1, poster: 1, file: 1, version: 1};
+
 		this._request = (url, data) => new Promise((resolve, reject) =>
 			request({
-				url: `${this._serverUrl}/backend/api/${url}`,
+				url: this._apiUrl + url,
 				method: 'POST',
 				json: data
+			}, (error, response, body) => !error ? resolve(body) : false)
+			.on('error', reject)
+			.on('response', rsp =>
+				rsp.statusCode !== 200
+				? reject({host: rsp.request.host, port: rsp.request.port, url: rsp.request.path, statusCode: rsp.statusCode})
+				: rsp.statusCode
+			)
+		);
+
+		this._uploadRequest = (type, data) => new Promise((resolve, reject) =>
+			request({
+				url: this._uploadUrl + type,
+				method: 'POST',
+				formData: data
 			}, (error, response, body) => !error ? resolve(body) : false)
 			.on('error', reject)
 			.on('response', rsp =>
@@ -34,6 +53,7 @@ module.exports = (...args) => new (class Shotty {
 			if(data[idx].id === id)
 				return idx;
 		}
+
 
 		return -1;
 	}
@@ -54,7 +74,7 @@ module.exports = (...args) => new (class Shotty {
 	}
 
 	_checkType(type) {
-		return type in {users: 1, chats: 1, tasks: 1, todos: 1, versions: 1, shots: 1, projects: 1, lists: 1, notifications: 1};
+		return type in this._availableDataTypes;
 	}
 
 	_modifyType(type) {
@@ -178,6 +198,28 @@ module.exports = (...args) => new (class Shotty {
 			.then(result => !result.error ? resolve(result.data) : reject(result.data))
 			.catch(error => reject(error))
 		);
+	}
+
+	async upload(type, file, data) {
+		const fs = require('fs'),
+			path = require('path');
+
+		if(!fs.existsSync(file))
+			throw Error(`File <${file}> doesn't exist!`);
+
+		if(!data.projectId || !data.shotId)
+			throw Error('<projectId> or <shotId> are missing!');
+
+		return await this._uploadRequest(type, {
+			secret: this._secret,
+			projectId: data.projectId,
+			shotId: data.shotId,
+			name: path.parse(file).name,
+			type: data.type,
+			creatorId: data.creatorId || '',
+			description: data.description || '',
+			file: fs.createReadStream(file)
+		});
 	}
 
 	get get() {

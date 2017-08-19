@@ -1,17 +1,19 @@
 {
-  "name": "shotty-examples",
-  "version": "1.0.0",
-  "description": "",
+  "name": "shotty-upload-version-example",
+  "version": "0.0.0",
+  "description": "Version uploading example",
+  "repository": "https://github.com/sick/shotty-api",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "private": true,
+  "author": "Shotty Team",
   "license": "MIT",
   "dependencies": {
     "commander": "^2.11.0",
     "glob": "^7.1.2",
-    "request": "^2.81.0",
-    "shotty-api": "0.0.10"
+    "shotty-api": "file:../../js"
   }
 }
