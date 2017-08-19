@@ -1,7 +1,8 @@
 'use strict';
 
 const request = require('request'),
-	io = require('socket.io-client');
+	io = require('socket.io-client'),
+	prettifiers = require('./prettifiers');
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
@@ -165,6 +166,9 @@ module.exports = (...args) => new (class Shotty {
 
 	create(type, data) {
 		type = this._modifyType(type);
+
+		if(type === 'projects')
+			data = prettifiers.project(data);
 
 		return new Promise((resolve, reject) =>
 			!this._checkType(type)
