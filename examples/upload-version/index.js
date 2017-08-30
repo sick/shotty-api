@@ -41,16 +41,7 @@ else {
 				console.log('Uploading file:', filename);
 
 				if((shot = shots.find(shot => shot.code === filename))) {
-					console.log('Shot already exists:', shot.sequence, shot.code, '\nAdding the version into the shot.');
-
-					shotty.upload('version', file, {
-						projectId: program.project,
-						shotId: shot.id,
-						description: '',
-						type: 'src'
-					})
-					.then(version => console.log('Uploaded version', version.name))
-					.catch(error => console.error(`Couldn't upload version <${filename}>`, error));
+					console.log('Shot already exists:', shot.sequence, shot.code);
 				}
 				else {
 					console.log('Creating a new shot for', filename);
