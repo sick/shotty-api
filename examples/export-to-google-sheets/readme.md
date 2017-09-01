@@ -2,7 +2,7 @@
 
 Here is a good starting point to find any details about Google Sheets API: https://developers.google.com/sheets/api/quickstart/nodejs
 
-#### 1. Getting Google API secret:
+#### 1. Getting Google API secret (don't be scared, you have to do this once :):
 - Use [this wizard](https://console.developers.google.com/start/api?id=sheets.googleapis.com) to create or select a project in the Google Developers Console and automatically turn on the API. Click Continue, then Go to credentials.
 - On the Add credentials to your project page, click the Cancel button.
 - At the top of the page, select the OAuth consent screen tab. Select an Email address, enter a Product name if not already set, and click the Save button.
@@ -24,7 +24,6 @@ npm i
 ```
 
 Later, the script will use the saved token, so you wouldn't need to run through authorization process every time.
-
 
 ### 4. Replace the SHOTTY credentials inside the script
 
