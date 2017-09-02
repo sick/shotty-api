@@ -1,5 +1,7 @@
 ## Export to Google Sheets example
 
+See what it does: https://youtu.be/-OaDjCxBVS4
+
 Here is a good starting point to find any details about Google Sheets API: https://developers.google.com/sheets/api/quickstart/nodejs
 
 #### 1. Getting Google API secret (don't be scared, you have to do this once :):
