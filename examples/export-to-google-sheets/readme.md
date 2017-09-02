@@ -12,6 +12,7 @@ Here is a good starting point to find any details about Google Sheets API: https
 - Click the 🡇 (Download JSON) button to the right of the client ID.
 - Move this file to your working directory and rename it secret.json.
 
+
 #### 2. Install Node.js modules
 ```sh
 npm i 
@@ -24,6 +25,7 @@ npm i
 ```
 
 Later, the script will use the saved token, so you wouldn't need to run through authorization process every time.
+
 
 ### 4. Replace the SHOTTY credentials inside the script
 
