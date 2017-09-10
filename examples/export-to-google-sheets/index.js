@@ -4,7 +4,8 @@
 const sheets = new (require('./shotty-sheets-wrapper'))(),
 	commander = require('commander'),
 	shotty = require('shotty-api')('demo.shottyapp.com', 'a5cf1c75-4f863909-c632683e-5a0e820d-731eb5be'),
-	q = require('./q');
+	q = require('./q'),
+	limiter = new (require('bottleneck'))(1, 1200);
 
 commander.version('0.0.42')
 	.option('-p, --project [project]', 'Project code')
@@ -79,19 +80,19 @@ commander.version('0.0.42')
 		shots = shots.filter(s => s.projectId === projectCode);
 		console.log(`Got ${shots.length} shots. Exporting...`);
 
-		await exportShots(shots)
+		await limiter.schedule(exportShots, shots)
 		.then(rs => console.log(`Exported shots.\n  Updated — ${rs.updated.shots.length}: ${rs.updated.shots.map(s => `<${s.sequence} ${s.code}>`) || '—'}\n  Appended — ${rs.appended.shots.length}: ${rs.appended.shots.map(s => `<${s.sequence} ${s.code}>`) || '—'}\n  Skipped — ${rs.skipped.length}: ${rs.skipped.map(s => `<${s.sequence} ${s.code}>`) || '—'}`))
 		.catch(error => console.error('Couldn\'t export shots due to error: ', error));
 
 		console.log('Exported shots. Watching...');
 	})
 	.onAdd(shot => shot.projectId !== projectCode ? false :
-		exportShots(shot)
+		limiter.schedule(exportShots, shot)
 		.then(() => console.log(`Exported new shot: <${shot.sequence} ${shot.code}>`))
 		.catch(error => console.error(`Couldn't export new shot <${shots[i].sequence} ${shots[i].code}>`, error))
 	)
 	.onUpdate(shot => shot.projectId !== projectCode ? false :
-		exportShots(shot)
+		limiter.schedule(exportShots, shot)
 		.then(() => console.log(`Exported changed shot: <${shot.sequence} ${shot.code}>`))
 		.catch(error => console.error(`Couldn't export changed shot <${shots[i].sequence} ${shots[i].code}>`, error))
 	);
