@@ -1,5 +1,6 @@
 secret.json
 client_secret.json
+package-lock.json
 
 # Logs
 logs
