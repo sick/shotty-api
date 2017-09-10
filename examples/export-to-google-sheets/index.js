@@ -49,16 +49,28 @@ commander.version('0.0.42')
 	const eq = (a, b) => (a || '') == (b || '');
 	const shotIsUnchanged = shot =>
 		spreadsheetData.some(r => r[0] === shot.sequence && r[1] === shot.code && eq(r[2], shot.status) && eq(r[3], shot.description) && eq(r[4], shot.meta));
+	const findShotIdx = shot =>
+		spreadsheetData.findIndex((row, idx) => idx > 0 && row[0] === shot.sequence && row[1] === shot.code);
 
-	const exportShot = async (shot, update = true) => {
-		if(update)
-			spreadsheetData = await sheets.get(); // update local before updating remote data
+	const exportShots = async shots => {
+		shots = [].concat(shots); // converting anything into an array
 
-		let idx = spreadsheetData.findIndex((row, idx) => idx > 0 && row[0] === shot.sequence && row[1] === shot.code);
+		spreadsheetData = await sheets.get(); // update local before updating remote data
 
-		return (idx === -1)
-			? await sheets.append([[shot.sequence, shot.code, shot.status, shot.description, shot.meta]])
-			: !shotIsUnchanged(shot) ? await sheets.set({range: `C${idx+1}:Z`, values:[[shot.status, shot.description, shot.meta]]}) : false;
+		let appendShots = shots.filter(shot => findShotIdx(shot) === -1);
+		let updateShots = shots.filter(shot => !appendShots.some(s => s.id === shot.id) && !shotIsUnchanged(shot));
+
+		return {
+			appended: {
+				shots: appendShots,
+				result: await sheets.append(appendShots.map(shot => [shot.sequence, shot.code, shot.status, shot.description, shot.meta]))
+			},
+			updated: {
+				shots: updateShots,
+				result: await sheets.set(updateShots.map(shot => ({range: `C${findShotIdx(shot)+1}:Z`, values: [[shot.status, shot.description, shot.meta]]})))
+			},
+			skipped: shots.filter(shot => !appendShots.some(s => shot.id === s.id) && !updateShots.some(s => shot.id === s.id))
+		};
 	};
 
 	shotty.changes('shots', {onConnect: () => console.log('Watching for changes in shots...')})
@@ -67,20 +79,19 @@ commander.version('0.0.42')
 		shots = shots.filter(s => s.projectId === projectCode);
 		console.log(`Got ${shots.length} shots. Exporting...`);
 
-		for(let i = 0; i < shots.length; i++) { // we should do this in a sync way, since google is not good at async <append> updates
-			await exportShot(shots[i], false)
-			.then(result => !result ? console.log(`Skipped exporting shot <${shots[i].sequence} ${shots[i].code}>`) : console.log(`Exported shot <${shots[i].sequence} ${shots[i].code}>`))
-			.catch(error => console.error(`Couldn't export shot <${shots[i].sequence} ${shots[i].code}>`, error));
-		}
+		await exportShots(shots)
+		.then(rs => console.log(`Exported shots.\n  Updated — ${rs.updated.shots.length}: ${rs.updated.shots.map(s => `<${s.sequence} ${s.code}>`) || '—'}\n  Appended — ${rs.appended.shots.length}: ${rs.appended.shots.map(s => `<${s.sequence} ${s.code}>`) || '—'}\n  Skipped — ${rs.skipped.length}: ${rs.skipped.map(s => `<${s.sequence} ${s.code}>`) || '—'}`))
+		.catch(error => console.error('Couldn\'t export shots due to error: ', error));
+
 		console.log('Exported shots. Watching...');
 	})
 	.onAdd(shot => shot.projectId !== projectCode ? false :
-		exportShot(shot)
+		exportShots(shot)
 		.then(() => console.log(`Exported new shot: <${shot.sequence} ${shot.code}>`))
 		.catch(error => console.error(`Couldn't export new shot <${shots[i].sequence} ${shots[i].code}>`, error))
 	)
 	.onUpdate(shot => shot.projectId !== projectCode ? false :
-		exportShot(shot)
+		exportShots(shot)
 		.then(() => console.log(`Exported changed shot: <${shot.sequence} ${shot.code}>`))
 		.catch(error => console.error(`Couldn't export changed shot <${shots[i].sequence} ${shots[i].code}>`, error))
 	);
