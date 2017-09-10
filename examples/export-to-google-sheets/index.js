@@ -89,11 +89,11 @@ commander.version('0.0.42')
 	.onAdd(shot => shot.projectId !== projectCode ? false :
 		limiter.schedule(exportShots, shot)
 		.then(() => console.log(`Exported new shot: <${shot.sequence} ${shot.code}>`))
-		.catch(error => console.error(`Couldn't export new shot <${shots[i].sequence} ${shots[i].code}>`, error))
+		.catch(error => console.error(`Couldn't export new shot <${shot.sequence} ${shot.code}>`, error))
 	)
 	.onUpdate(shot => shot.projectId !== projectCode ? false :
 		limiter.schedule(exportShots, shot)
 		.then(() => console.log(`Exported changed shot: <${shot.sequence} ${shot.code}>`))
-		.catch(error => console.error(`Couldn't export changed shot <${shots[i].sequence} ${shots[i].code}>`, error))
+		.catch(error => console.error(`Couldn't export changed shot <${shot.sequence} ${shot.code}>`, error))
 	);
 })();
