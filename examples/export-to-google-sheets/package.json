@@ -7,7 +7,7 @@
     "commander": "^2.11.0",
     "google-auth-library": "^0.10.0",
     "googleapis": "^21.3.0",
-    "shotty-api": "0.0.12"
+    "shotty-api": "^0.0.12"
   },
   "devDependencies": {},
   "scripts": {
