@@ -175,7 +175,7 @@ module.exports = (...args) => new (class Shotty {
 			? reject('wrong type of object')
 			: this._request('create', {type: type, data: data, token: this._jwt})
 			.then(result => !result.error ? resolve(result.data) : reject(result.data))
-			.catch(error => reject(error))
+			.catch(reject)
 		);
 	}
 
@@ -188,7 +188,7 @@ module.exports = (...args) => new (class Shotty {
 			? reject('wrong type of object')
 			: this._request('edit', {type: type, data: data, token: this._jwt})
 			.then(result => !result.error ? resolve(result.data) : reject(result.data))
-			.catch(error => reject(error))
+			.catch(reject)
 		);
 	}
 
@@ -200,7 +200,7 @@ module.exports = (...args) => new (class Shotty {
 			? reject('wrong type of object')
 			: this._request('delete', {type: type, data: id, token: this._jwt})
 			.then(result => !result.error ? resolve(result.data) : reject(result.data))
-			.catch(error => reject(error))
+			.catch(reject)
 		);
 	}
 
