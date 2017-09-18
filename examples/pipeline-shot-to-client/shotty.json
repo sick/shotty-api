@@ -1,4 +1,4 @@
-[
-	"<SHOTTY_URL>",
-	"<API_SECRET>"
-]
+{
+	"url": "<SHOTTY_URL>",
+	"secret": "<API_SECRET>"
+}
