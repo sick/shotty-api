@@ -79,7 +79,7 @@ const notifyUsers = async shot => {
 	let allUsers = await shotty.get.users(), // getting all users
 		selectedUsers = cmd.users ? cmd.users.split(',').map(u => u.trim()) : [], // splitting -u argument value into array of ids and emails
 		users = allUsers.filter(au => // getting superusers and users specified in -u argument
-			au.role === 'superuser' || selectedUsers.findIndex(su => au.id === su || au.local.email === su)
+			au.role === 'superuser' || selectedUsers.findIndex(su => au.id === su || au.local.email === su) !== -1
 		);
 
 	if(!users.length)
@@ -90,6 +90,8 @@ const notifyUsers = async shot => {
 
 	try {
 		await upload(await download(latestVersion)); // downloading the version file from SHOTTY and uploading it to the ftp server
+
+		console.log('Sending notifications to', users.map(user => user.realname || user.local.email).join(', '));
 
 		// Notification scheme: https://github.com/sick/shotty-api/blob/master/js/schemes.md#notifications
 		let results = await new Promise((resolve, reject) =>
