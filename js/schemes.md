@@ -36,6 +36,11 @@ text: <string>
 url: <string> — without domain
 iconUrl: <string> — without domain
 previewUrl: <string> — without domain
+meta: {
+	caption: <string> — short text describing attached media file
+	mediaType: <string>
+	mediaUrl: <string>
+}
 ```
 
 
