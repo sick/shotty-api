@@ -1,0 +1,12 @@
+{
+	"host": "ftp.local",
+	"port": 21,
+	"active": false,
+	"user": "username",
+	"password": "12345",
+	"secure": false,
+	"secureOptions": {},
+	"connTimeout": 10000,
+	"pasvTimeout": 10000,
+	"keepalive": 5000
+}

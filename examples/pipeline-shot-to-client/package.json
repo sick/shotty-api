@@ -1,0 +1,25 @@
+{
+  "name": "pipeline-shot-to-client",
+  "version": "6.6.6",
+  "description": "Pipeline example #1",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "."
+  },
+  "keywords": [
+    "pipeline",
+    "shotty"
+  ],
+  "author": "SHOTTY",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "commander": "^2.11.0",
+    "ftp": "^0.3.10",
+    "shotty-api": "^0.0.12"
+  }
+}
