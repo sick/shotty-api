@@ -2,8 +2,12 @@
 'use strict';
 
 const cmd = require('commander'),
-	shotty = require('shotty-api')(...require('./shotty.json')),
-	ftp = require('ftp');
+	shottySettings = require('./shotty.json'),
+	shotty = require('shotty-api')(shottySettings.url, shottySettings.secret),
+	ftp = require('ftp'),
+	https = require('https'),
+	fs = require('fs'),
+	basename = file => require('path').parse(file).base;
 
 /*
 	setting up commander to read command line arguments
@@ -20,7 +24,7 @@ if(!cmd.project)
 	process.exit(console.error('Please, specify a project code!'), cmd.outputHelp());
 
 /*
-	setting up ftp uploader
+	ftp uploader
 */
 const upload = file => new Promise((resolve, reject) => {
 	let c = new ftp();
@@ -28,7 +32,7 @@ const upload = file => new Promise((resolve, reject) => {
 	c.on('ready', () => // setting up callback function which fires when ftp-connection is ready
 		c.put(
 			file, // path to a file to upload
-			'/ftp/' + require('path').parse(file).base, // where to store it on ftp server
+			'/ftp/' + basename(file), // where to store it on ftp server
 			err => err ? reject(err) : resolve(c.end()) // callback: checking if there was an error and resolving the promise if not
 		)
 	);
@@ -37,7 +41,36 @@ const upload = file => new Promise((resolve, reject) => {
 });
 
 /*
-	setting up notify function
+	version downloader
+*/
+const download = version => new Promise((resolve, reject) =>
+	https.get(`https://${shottySettings.url}/storage/${version.file.url}`, response => {
+		let filePath = `/tmp/${basename(version.file.url)}`,
+			file = fs.createWriteStream(filePath);
+
+		response.pipe(file);
+
+		file.on('finish', () =>
+			file.close(() => {
+				console.log('Downloaded version file:', filePath);
+				resolve(filePath);
+			})
+		);
+	})
+	.on('error', error => {
+		console.error('Could not download the file due to error:\n', error);
+		fs.unlinkSync(`/tmp/${basename(version.file.url)}`);
+		reject(error);
+	})
+);
+
+/*
+	version file remover
+*/
+const deleteVersion = version => fs.unlinkSync(`/tmp/${basename(version.file.url)}`);
+
+/*
+	notify function
 */
 const notifyUsers = async shot => {
 	let allUsers = await shotty.get.users(), // getting all users
@@ -53,10 +86,10 @@ const notifyUsers = async shot => {
 		latestVersion = versions.sort((a, b) => new Date(b.date) - new Date(a.date))[0]; // selecting the latest version
 
 	try {
-		await upload('/media/shotty/storage/' + latestVersion.file.url); // uploading a file to the ftp server
+		await upload(await download(latestVersion)); // downloading the version file from SHOTTY and uploading it to the ftp server
 
 		// Notification scheme: https://github.com/sick/shotty-api/blob/master/js/schemes.md#notifications
-		return await new Promise((resolve, reject) =>
+		let results = await new Promise((resolve, reject) =>
 			Promise.all( // creating notifications for all users and waiting for them all to be created
 				users.map(user =>
 					shotty.create('notification', {
@@ -69,13 +102,17 @@ const notifyUsers = async shot => {
 						meta: {
 							caption: `The latest version for shot <${shot.sequence} ${shot.code}>`,
 							mediaType: latestVersion.file.type,
-							mediaUrl: '/media/shotty/storage/' + latestVersion.file.url,
-							mediaLocation: 'local'
+							mediaUrl: `/storage/${latestVersion.file.basepath}/${latestVersion.file.preview}`,
+							mediaLocation: 'web'
 						}
 					})
 				)
 			).then(resolve, reject)
 		);
+
+		deleteVersion(latestVersion);
+
+		return results;
 	}
 	catch(error) {
 		console.error('Something wrong happened', error);
@@ -93,8 +130,8 @@ const notifyUsers = async shot => {
 						meta: {
 							caption: `The latest version for shot <${shot.sequence} ${shot.code}>`,
 							mediaType: latestVersion.file.type,
-							mediaUrl: '/media/shotty/storage/' + latestVersion.file.url,
-							mediaLocation: 'local'
+							mediaUrl: `/storage/${latestVersion.file.basepath}/${latestVersion.file.preview}`,
+							mediaLocation: 'web'
 						}
 					})
 				)
