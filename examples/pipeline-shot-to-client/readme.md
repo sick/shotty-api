@@ -1,6 +1,6 @@
 ## Pipline example #1
 
-Uploading an approved version to FTP server and sending notifications to `superusers` and users specified in command line.
+Uploading an approved version (status = `client`) to FTP server and sending notifications to `superusers` and users specified in command line.
 
 ---
 
