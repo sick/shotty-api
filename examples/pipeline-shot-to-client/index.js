@@ -29,13 +29,14 @@ if(!cmd.project)
 const upload = file => new Promise((resolve, reject) => {
 	let c = new ftp();
 
-	c.on('ready', () => // setting up callback function which fires when ftp-connection is ready
+	c.on('ready', () => {// setting up callback function which fires when ftp-connection is ready
+		console.log(`Uploading file <${basename(file)}> to FTP...`);
 		c.put(
 			file, // path to a file to upload
 			'/ftp/' + basename(file), // where to store it on ftp server
 			err => err ? reject(err) : resolve(c.end()) // callback: checking if there was an error and resolving the promise if not
-		)
-	);
+		);
+	});
 
 	c.connect(require('./ftp.json')); // starting ftp-connection
 });
@@ -43,7 +44,9 @@ const upload = file => new Promise((resolve, reject) => {
 /*
 	version downloader
 */
-const download = version => new Promise((resolve, reject) =>
+const download = version => new Promise((resolve, reject) => {
+	console.log(`Downloading file <${basename(version.file.url)}>...`);
+
 	https.get(`https://${shottySettings.url}/storage/${version.file.url}`, response => {
 		let filePath = `/tmp/${basename(version.file.url)}`,
 			file = fs.createWriteStream(filePath);
@@ -61,8 +64,8 @@ const download = version => new Promise((resolve, reject) =>
 		console.error('Could not download the file due to error:\n', error);
 		fs.unlinkSync(`/tmp/${basename(version.file.url)}`);
 		reject(error);
-	})
-);
+	});
+});
 
 /*
 	version file remover
