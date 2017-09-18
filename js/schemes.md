@@ -40,6 +40,7 @@ meta: {
 	caption: <string> — short text describing attached media file
 	mediaType: <string>
 	mediaUrl: <string>
+	mediaLocation: <string> — 'local' or 'web'
 }
 ```
 
