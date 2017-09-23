@@ -218,7 +218,7 @@ module.exports = (...args) => new (class Shotty {
 			secret: this._secret,
 			projectId: data.projectId,
 			shotId: data.shotId,
-			name: path.parse(file).name,
+			name: path.parse(file).base,
 			type: data.type,
 			creatorId: data.creatorId || '',
 			description: data.description || '',
