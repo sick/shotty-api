@@ -3,7 +3,7 @@
 
 const path = require('path'),
 	program = require('commander'),
-	shotty = require('shotty-api')('YOUR-SHOTTY-URL', 'YOUR-API-SECRET');
+	shotty = require('shotty-api')('ava.shotty.ru', 'e1767298-5e454986-5dd845bf-a5cd8ba7-7e52b7e8');
 
 program
 	.version('1.0')
@@ -49,8 +49,8 @@ else {
 					shotty
 					.create('shot', {
 						projectId: program.project,
-						sequence: `ep${filename.slice(0, 2)}`,
-						code: filename,
+						sequence: filename.split('_').slice(0, 2).join('_'),
+						code: filename.split('_').slice(2, 4).join('_'),
 						status: program.status,
 						creatorId: null
 					})
