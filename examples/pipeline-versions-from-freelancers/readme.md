@@ -1,7 +1,6 @@
 ## Pipline example #2
 
-Copy new versions to the project, if they are not there.
-Location for each version type is defined in the `project -> version` settings
+#### Copy new versions to the project, if they are not there. Location for each version type is defined in the `project -> version` settings
 ---
 
 ### How to try:
