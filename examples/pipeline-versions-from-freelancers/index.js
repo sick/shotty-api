@@ -14,7 +14,7 @@ const getLocalPath = async version => {
 	const path = project.versionTypes.find(type => type.label === version.type).path
 		.replace(/<root>/g, project.paths.root)
 		.replace(/<project>/g, project.id)
-		.replace(/<type>/g, project.paths.root[shot.type])
+		.replace(/<type>/g, project.paths[shot.type])
 		.replace(/<episode>/g, shot.sequence)
 		.replace(/<code>/g, shot.code)
 		.replace(/<filename>/g, version.name.substr(0, version.name.lastIndexOf('.')))
@@ -55,7 +55,7 @@ const download = version => new Promise((resolve, reject) => {
 	finally, launching the watcher
 */
 shotty.connect()
-.then(result => {
+.then(async result => {
 	shotty.changes('versions', {onConnect: () => console.log('Watching for changes in versions...')})
 	.onDisconnect(() => console.log('Stopped watching versions.'))
 	.onAdd(async version => fs.open(await getLocalPath(version), 'r', (err, fd) => err ? download(version) : false ));
