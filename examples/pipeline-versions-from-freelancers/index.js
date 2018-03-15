@@ -36,7 +36,10 @@ const download = version => new Promise((resolve, reject) => {
 		response.pipe(file);
 
 		file
-		.on('error', err => console.log(err))
+		.on('error', err => {
+				console.log(`Got an error <${err}> with file <${filePath}> and version <${version}>`)
+				console.log(err)
+			})
 		.on('finish', () =>
 			file.close(() => {
 				console.log('Downloaded version file:', filePath);
