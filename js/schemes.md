@@ -1,7 +1,7 @@
 ## Shotty API — DB objects schemes
 
 ### chats
-```
+```js
 id: <string>
 date: <date>
 projectId: <string>
@@ -18,7 +18,7 @@ meta: <object>, default - {}
 
 
 ### lists
-```
+```js
 id: <string>
 projectId: <string>
 creatorId: <string> - user id
@@ -28,7 +28,7 @@ shots: <array> of <string> - shots ids
 
 
 ### notifications
-```
+```js
 id: <string>
 date: <date>
 userId: <string>
@@ -46,7 +46,7 @@ meta: {
 
 
 ### projects
-```
+```js
 id: <string> - human readable
 code: <string> - the same as `id`
 _dbVersion: <int>, default - `1`
@@ -81,7 +81,7 @@ tasksStatuses: <array> of <object>
 
 
 ### shots
-```
+```js
 id: <string>
 date: <date>
 projectId: <string>
@@ -101,7 +101,7 @@ eye: <string>, default - null
 
 
 ### sprints
-```
+```js
 id: <string>
 name: <string>
 start: <date>
@@ -115,7 +115,7 @@ changes: <array> of <object>:
 
 
 ### tasks
-```
+```js
 id: <string>
 date: <date>
 projectId: <string>
@@ -135,7 +135,7 @@ meta: unspecified <object>
 
 
 ### teams
-```
+```js
 id: <string>
 name: <string>, unique
 avatar: <string> - url
@@ -143,7 +143,7 @@ users: <array> of <string> - uids
 ```
 
 ### todos (ex-reviews)
-```
+```js
 id: <string>
 date: <date>
 projectId: <string>
@@ -163,7 +163,7 @@ meta:
 ```
 
 ### users
-```
+```js
 id: <string>
 active: <bool>, default value is in settings
 role: <string>, default value is in settings
@@ -172,7 +172,7 @@ telegramId: <string> or null
 created: <date>
 avatar: <string> or null
 local:
-	email: <string>,
+	email: <string>
 	password: <string>
 ```
 
@@ -180,7 +180,7 @@ local:
 
 
 ### versions
-```
+```js
 id: <string>
 storageId: <string> - id of the record in storage db
 date: <date>
