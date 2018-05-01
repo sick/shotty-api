@@ -79,7 +79,19 @@ module.exports = (...args) => new (class Shotty {
 	}
 
 	_modifyType(type) {
-		return {user: 'users', chat: 'chats', task: 'tasks', todo: 'todos', version: 'versions', shot: 'shots', project: 'projects', list: 'lists', notification: 'notifications'}[type];
+		return {
+			chat: 'chats',
+			list: 'lists',
+			notification: 'notifications',
+			project: 'projects',
+			shot: 'shots',
+			sprint: 'sprints',
+			task: 'tasks',
+			team: 'teams',
+			todo: 'todos',
+			user: 'users',
+			version: 'versions'
+		}[type];
 	}
 
 	connect() {
@@ -242,25 +254,27 @@ module.exports = (...args) => new (class Shotty {
 			);
 
 		return {
-			user: id => _get('users', id),
-			users: (...args) => _get('users', null, ...args),
 			chat: id => _get('chats', id),
 			chats: (...args) => _get('chats', null, ...args),
-			task: id => _get('tasks', id),
-			tasks: (...args) => _get('tasks', null, ...args),
-			review: id => _get('reviews', id),
-			reviews: (...args) => _get('reviews', null, ...args),
-			todo: id => _get('reviews', id),
-			todos: (...args) => _get('reviews', null, ...args),
-			version: id => _get('versions', id),
-			versions: (...args) => _get('versions', null, ...args),
-			shot: id => _get('shots', id),
-			shots: (...args) => _get('shots', null, ...args),
-			project: id => _get('projects', id),
-			projects: (...args) => _get('projects', null, ...args),
 			list: id => _get('lists', id),
 			lists: (...args) => _get('lists', null, ...args),
-			settings: () => _get('setings')
+			project: id => _get('projects', id),
+			projects: (...args) => _get('projects', null, ...args),
+			settings: () => _get('setings'),
+			shot: id => _get('shots', id),
+			shots: (...args) => _get('shots', null, ...args),
+			sprint: id => _get('sprints', id),
+			sprints: (...args) => _get('sprints', null, ...args),
+			task: id => _get('tasks', id),
+			tasks: (...args) => _get('tasks', null, ...args),
+			team: id => _get('teams', id),
+			teams: (...args) => _get('teams', null, ...args),
+			todo: id => _get('reviews', id),
+			todos: (...args) => _get('reviews', null, ...args),
+			user: id => _get('users', id),
+			users: (...args) => _get('users', null, ...args),
+			version: id => _get('versions', id),
+			versions: (...args) => _get('versions', null, ...args)
 		};
 	}
 })(...args);
