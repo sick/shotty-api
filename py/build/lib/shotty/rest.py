@@ -25,12 +25,16 @@ class api:
 			print 'shotty api authenticated'
 			self.jwt = resp['data']['token']
 
-	def _on_socket_response(self, *args):
-		resp = json.loads(args[0].split(',', 1)[1])
-		print('_on_socket_response', resp)
+	def _socket_response_wrapper(self, *args):
+		if len(args):
+			resp = json.loads(args[0].split(',', 1)[1])
+			cb(resp, type=resp['type'])
+		else:
+			pass
+		# print('_on_socket_response', resp)
 
 
-	def changes(self, namespace):
+	def changes(self, namespace, cb):
 		if namespace not in self.types:
 			raise ValueError('wrong type of changes requested')
 
@@ -38,11 +42,11 @@ class api:
 		socket = SocketIO(self.serverUrl,
 				 self.port,
 				 resource='socket',
-				 params={'token': self.jwt},
-				 verify=False)
+				 params={'token': self.jwt})
+				 # verify=False)
 
 		socket.define(BaseNamespace, '/'+namespace)
-		socket.on('message', self._on_socket_response)
+		socket.on('message', cb)
 
 		socket.wait() # Wait forever.
 

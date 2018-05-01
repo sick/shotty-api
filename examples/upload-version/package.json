@@ -14,6 +14,6 @@
   "dependencies": {
     "commander": "^2.11.0",
     "glob": "^7.1.2",
-    "shotty-api": "file:../../js"
+    "shotty-api": "^0.0.12"
   }
 }
