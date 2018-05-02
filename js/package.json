@@ -1,6 +1,6 @@
 {
   "name": "shotty-api",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "Shotty API helper",
   "main": "index.js",
   "scripts": {
