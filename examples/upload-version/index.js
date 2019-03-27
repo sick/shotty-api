@@ -40,7 +40,7 @@ else {
 
 				console.log('Uploading file:', filename);
 
-				if((shot = shots.find(shot => shot.code === filename))) {
+				if((shot = shots.find(shot => shot.code === filename.split('_').slice(1, 2).join('') && shot.sequence === filename.split('_').slice(0, 1).join('')))) {
 					console.log('Shot already exists:', shot.sequence, shot.code);
 				}
 				else {
@@ -49,8 +49,8 @@ else {
 					shotty
 					.create('shot', {
 						projectId: program.project,
-						sequence: filename.split('_').slice(0, 2).join('_'),
-						code: filename.split('_').slice(2, 4).join('_'),
+						sequence: filename.split('_').slice(0, 1).join(''),
+						code: filename.split('_').slice(1, 2).join(''),
 						status: program.status,
 						creatorId: null
 					})
@@ -61,6 +61,7 @@ else {
 							projectId: program.project,
 							shotId: shot.id,
 							description: '',
+							encode: 'true',
 							type: 'src'
 						})
 						.then(result => console.log('Uploaded version', JSON.parse(result).data.data.name))
